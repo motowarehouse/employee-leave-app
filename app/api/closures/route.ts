@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
+import { Prisma } from '@prisma/client'
 import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 import { countWorkingDays, getHolidayKeySet } from '@/lib/leave'
@@ -37,7 +38,7 @@ export async function POST(req: NextRequest) {
 
   const employees = (await prisma.employee.findMany({ where: { active: true } })) as Array<{ id: string }>
 
-  const closure = await prisma.$transaction(async (tx: typeof prisma) => {
+  const closure = await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
     const created = await tx.closure.create({
       data: { name: name.trim(), startDate: start, endDate: end },
     })
