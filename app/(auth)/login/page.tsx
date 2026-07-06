@@ -1,9 +1,10 @@
 'use client'
 
 import { useState } from 'react'
+import Image from 'next/image'
 import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
-import { CalendarDays, Eye, EyeOff, AlertCircle } from 'lucide-react'
+import { Eye, EyeOff, AlertCircle } from 'lucide-react'
 
 const OCEAN: React.CSSProperties = {
   background: `
@@ -42,14 +43,20 @@ export default function LoginPage() {
         {/* Logo + wordmark */}
         <div style={{ textAlign: 'center', marginBottom: 32 }}>
           <div style={{
-            width: 52, height: 52, borderRadius: 6, background: '#009BB4',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+            padding: '14px 20px', borderRadius: 8, background: 'rgba(255,255,255,0.06)',
             margin: '0 auto 14px',
-            boxShadow: '0 8px 24px rgba(0,155,180,0.35)',
+            boxShadow: '0 8px 24px rgba(0,0,0,0.25)',
           }}>
-            <CalendarDays size={22} color="white" strokeWidth={2} />
+            <Image
+              src="/mwh-logo.png"
+              alt="Motowarehouse"
+              width={180}
+              height={70}
+              style={{ objectFit: 'contain' }}
+              priority
+            />
           </div>
-          <p style={{ fontSize: 14, fontWeight: 800, letterSpacing: '0.16em', color: 'white' }}>MOTOWAREHOUSE</p>
           <p style={{ fontSize: 10, fontWeight: 300, letterSpacing: '0.22em', color: '#72D6E5', textTransform: 'uppercase', marginTop: 4 }}>
             Staff Leave
           </p>

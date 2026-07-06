@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { signOut } from 'next-auth/react'
 import { LayoutDashboard, Users, CalendarRange, Building2, LogOut, ChevronRight, Settings } from 'lucide-react'
@@ -27,7 +28,14 @@ export default function Sidebar() {
     <aside style={{ ...OCEAN, position: 'fixed', inset: '0 auto 0 0', zIndex: 40, width: 248, display: 'flex', flexDirection: 'column' }}>
       {/* Logo */}
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', padding: '16px 20px 12px', borderBottom: '1px solid rgba(255,255,255,0.08)', gap: 8 }}>
-        <p style={{ fontSize: 15, fontWeight: 800, letterSpacing: '0.1em', color: 'white', margin: 0 }}>MOTOWAREHOUSE</p>
+        <Image
+          src="/mwh-logo.png"
+          alt="Motowarehouse"
+          width={160}
+          height={48}
+          style={{ objectFit: 'contain', objectPosition: 'left' }}
+          priority
+        />
         <p style={{ fontSize: 9, fontWeight: 400, letterSpacing: '0.18em', color: '#72D6E5', textTransform: 'uppercase', lineHeight: 1.2, margin: 0 }}>
           Staff Leave
         </p>
