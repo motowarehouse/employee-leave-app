@@ -1,0 +1,89 @@
+'use client'
+
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import { signOut } from 'next-auth/react'
+import { LayoutDashboard, Users, CalendarRange, Building2, LogOut, ChevronRight, Settings } from 'lucide-react'
+
+const NAV = [
+  { href: '/',          icon: LayoutDashboard, label: 'Dashboard' },
+  { href: '/employees', icon: Users,           label: 'Employees' },
+  { href: '/calendar',  icon: CalendarRange,   label: 'Calendar' },
+  { href: '/closures',  icon: Building2,       label: 'Shop Closures' },
+  { href: '/holidays',  icon: Settings,        label: 'Public Holidays' },
+]
+
+const OCEAN: React.CSSProperties = {
+  background: `
+    repeating-linear-gradient(90deg, rgba(255,255,255,0.03) 0 1px, transparent 1px 8px),
+    linear-gradient(180deg, #001A21 0%, #003E47 100%)
+  `,
+}
+
+export default function Sidebar() {
+  const path = usePathname()
+
+  return (
+    <aside style={{ ...OCEAN, position: 'fixed', inset: '0 auto 0 0', zIndex: 40, width: 248, display: 'flex', flexDirection: 'column' }}>
+      {/* Logo */}
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', padding: '16px 20px 12px', borderBottom: '1px solid rgba(255,255,255,0.08)', gap: 8 }}>
+        <p style={{ fontSize: 15, fontWeight: 800, letterSpacing: '0.1em', color: 'white', margin: 0 }}>MOTOWAREHOUSE</p>
+        <p style={{ fontSize: 9, fontWeight: 400, letterSpacing: '0.18em', color: '#72D6E5', textTransform: 'uppercase', lineHeight: 1.2, margin: 0 }}>
+          Staff Leave
+        </p>
+      </div>
+
+      {/* Nav */}
+      <nav style={{ flex: 1, padding: '12px 10px', display: 'flex', flexDirection: 'column', gap: 2 }}>
+        {NAV.map(({ href, icon: Icon, label }) => {
+          const active = href === '/' ? path === '/' : path.startsWith(href)
+          return (
+            <Link
+              key={href}
+              href={href}
+              style={{
+                display: 'flex', alignItems: 'center', gap: 10,
+                padding: '9px 12px', borderRadius: 3,
+                fontSize: 13, fontWeight: active ? 600 : 400,
+                color: active ? 'white' : 'rgba(255,255,255,0.55)',
+                background: active ? 'rgba(0,155,180,0.25)' : 'transparent',
+                textDecoration: 'none',
+                transition: 'all 0.15s cubic-bezier(0.4,0,0.2,1)',
+                borderLeft: active ? '2px solid #009BB4' : '2px solid transparent',
+              } as React.CSSProperties}
+            >
+              <Icon size={15} strokeWidth={active ? 2 : 1.5} />
+              <span style={{ flex: 1 }}>{label}</span>
+              {active && <ChevronRight size={12} style={{ opacity: 0.5 }} />}
+            </Link>
+          )
+        })}
+      </nav>
+
+      {/* Footer */}
+      <div style={{ padding: '10px', borderTop: '1px solid rgba(255,255,255,0.08)' }}>
+        <div style={{ padding: '6px 12px', marginBottom: 4 }}>
+          <p style={{ fontSize: 10, color: 'rgba(255,255,255,0.3)', fontWeight: 300, letterSpacing: '0.02em' }}>
+            info@motowarehouse.com.cy
+          </p>
+        </div>
+        <button
+          onClick={() => signOut({ callbackUrl: '/login' })}
+          style={{
+            display: 'flex', alignItems: 'center', gap: 10,
+            width: '100%', padding: '9px 12px', borderRadius: 3,
+            fontSize: 13, color: 'rgba(255,255,255,0.4)',
+            background: 'none', border: 'none', cursor: 'pointer',
+            fontFamily: 'inherit',
+            transition: 'color 0.15s',
+          } as React.CSSProperties}
+          onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = 'white' }}
+          onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = 'rgba(255,255,255,0.4)' }}
+        >
+          <LogOut size={15} strokeWidth={1.5} />
+          <span>Sign Out</span>
+        </button>
+      </div>
+    </aside>
+  )
+}

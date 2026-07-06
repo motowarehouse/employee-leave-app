@@ -1,0 +1,65 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum LeaveType {
+  ANNUAL
+  SICK
+}
+
+model User {
+  id        String   @id @default(cuid())
+  username  String   @unique
+  password  String
+  name      String?
+  createdAt DateTime @default(now())
+}
+
+model Employee {
+  id                String       @id @default(cuid())
+  name              String
+  role              String?
+  startDate         DateTime?
+  annualEntitlement Int          @default(23)
+  active            Boolean      @default(true)
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
+  leaveEntries      LeaveEntry[]
+}
+
+model LeaveEntry {
+  id          String    @id @default(cuid())
+  employeeId  String
+  employee    Employee  @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  type        LeaveType
+  startDate   DateTime
+  endDate     DateTime
+  workingDays Int
+  note        String?
+  closureId   String?
+  closure     Closure?  @relation(fields: [closureId], references: [id], onDelete: Cascade)
+  createdAt   DateTime  @default(now())
+
+  @@index([employeeId])
+  @@index([closureId])
+}
+
+model Closure {
+  id        String       @id @default(cuid())
+  name      String
+  startDate DateTime
+  endDate   DateTime
+  createdAt DateTime     @default(now())
+  entries   LeaveEntry[]
+}
+
+model PublicHoliday {
+  id   String   @id @default(cuid())
+  date DateTime @unique
+  name String
+}
