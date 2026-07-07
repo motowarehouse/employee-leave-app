@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
-import { getDaysInMonth, isWeekend, format } from 'date-fns'
+import { getDaysInMonth, isSunday, format } from 'date-fns'
 import { prisma } from '@/lib/prisma'
 import { dateKey } from '@/lib/leave'
 import TeamCalendar, { DayCell, EmployeeCalendarRow } from '@/components/calendar/TeamCalendar'
@@ -40,7 +40,7 @@ export default async function CalendarPage({
     const d = new Date(year, month - 1, i + 1)
     return {
       day: i + 1,
-      weekend: isWeekend(d),
+      weekend: isSunday(d),
       holidayName: holidayMap.get(dateKey(d)) ?? null,
     }
   })
@@ -95,7 +95,7 @@ export default async function CalendarPage({
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
           <span style={{ width: 10, height: 10, borderRadius: 2, background: '#F5F5F5', border: '1px solid #E6E6E6', display: 'inline-block' }} />
-          <span style={{ fontSize: 12, color: '#666666' }}>Weekend</span>
+          <span style={{ fontSize: 12, color: '#666666' }}>Sunday</span>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
           <span style={{ fontSize: 12, color: '#DE1D1C', fontWeight: 700 }}>12</span>

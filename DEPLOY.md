@@ -77,8 +77,8 @@ you set in `.env`.
 - **Employees** have a fixed annual leave entitlement (23 days by default,
   editable per employee).
 - **Leave Entries** (Annual or Sick) are logged with a date range. Working
-  days are calculated automatically — weekends and Cyprus public holidays
-  are excluded.
+  days are calculated automatically — Sundays and Cyprus public holidays
+  are excluded; Saturdays count as working days.
 - **Sick leave** is tracked with no cap, purely for record-keeping.
 - **Shop Closures** let you log one date range (e.g. the August break or
   Christmas) and apply it as annual leave to every active employee in one

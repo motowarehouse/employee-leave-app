@@ -103,7 +103,7 @@ export default function AddLeaveForm({ employeeId }: { employeeId: string }) {
         </div>
 
         <p style={{ fontSize: 11, color: '#ABABAD' }}>
-          Weekends and public holidays are excluded automatically when calculating working days.
+          Sundays and public holidays are excluded automatically when calculating working days (Saturdays count).
         </p>
 
         <div style={{ display: 'flex', gap: 10 }}>

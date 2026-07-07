@@ -1,4 +1,4 @@
-import { eachDayOfInterval, isWeekend as dfIsWeekend, format, getYear } from 'date-fns'
+import { eachDayOfInterval, isSunday, format, getYear } from 'date-fns'
 import { prisma } from './prisma'
 
 export type LeaveTypeValue = 'ANNUAL' | 'SICK'
@@ -9,15 +9,15 @@ export function dateKey(date: Date): string {
 }
 
 /**
- * Count working days (Mon–Fri, excluding the given public holidays) in an
- * inclusive date range.
+ * Count working days (Mon–Sat, excluding Sundays and the given public
+ * holidays) in an inclusive date range. Saturdays count as working days.
  */
 export function countWorkingDays(start: Date, end: Date, holidayKeys: Set<string>): number {
   if (end < start) return 0
   const days = eachDayOfInterval({ start, end })
   let count = 0
   for (const day of days) {
-    if (dfIsWeekend(day)) continue
+    if (isSunday(day)) continue
     if (holidayKeys.has(dateKey(day))) continue
     count++
   }
