@@ -3,9 +3,8 @@ import { notFound } from 'next/navigation'
 import { ArrowLeft } from 'lucide-react'
 import { prisma } from '@/lib/prisma'
 import { summarizeLeave } from '@/lib/leave'
-import { formatDate } from '@/lib/utils'
-import AddLeaveForm from '@/components/employees/AddLeaveForm'
 import LeaveHistoryTable from '@/components/employees/LeaveHistoryTable'
+import EmployeeDetailHeader from '@/components/employees/EmployeeDetailHeader'
 
 export const dynamic = 'force-dynamic'
 
@@ -54,16 +53,15 @@ export default async function EmployeeDetailPage({ params }: { params: { id: str
           <ArrowLeft size={13} strokeWidth={2} />
           Back to Employees
         </Link>
-        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
-          <div>
-            <h1 style={{ fontSize: 22, fontWeight: 700, color: '#001A21' }}>{employee.name}</h1>
-            <p style={{ fontSize: 13, color: '#888888', marginTop: 2 }}>
-              {employee.role || 'No role set'}
-              {employee.startDate ? ` · Started ${formatDate(employee.startDate)}` : ''}
-            </p>
-          </div>
-          <AddLeaveForm employeeId={employee.id} />
-        </div>
+        <EmployeeDetailHeader
+          employee={{
+            id: employee.id,
+            name: employee.name,
+            role: employee.role,
+            startDate: employee.startDate ? employee.startDate.toISOString().slice(0, 10) : null,
+            annualEntitlement: employee.annualEntitlement,
+          }}
+        />
       </div>
 
       <div style={{ display: 'flex', gap: 14 }}>
