@@ -35,7 +35,7 @@ model Employee {
   bank              String?
   grossSalary       Float?
   netSalary         Float?
-  cashAmount        Float?
+  agreement         Float?
   iban              String?
   accountNumber     String?
 }

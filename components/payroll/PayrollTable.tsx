@@ -10,7 +10,7 @@ export interface PayrollRow {
   bank: string | null
   grossSalary: number | null
   netSalary: number | null
-  cashAmount: number | null
+  agreement: number | null
   iban: string | null
   accountNumber: string | null
 }
@@ -19,7 +19,7 @@ interface EditState {
   bank: string
   grossSalary: string
   netSalary: string
-  cashAmount: string
+  agreement: string
   iban: string
   accountNumber: string
 }
@@ -29,12 +29,12 @@ function formatMoney(value: number | null): string {
   return `€${value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
 }
 
-// Agreement = the total amount actually agreed with the employee
-// (official net salary plus any extra paid in cash). Always derived,
-// never entered directly.
-function computeAgreement(netSalary: number | null, cashAmount: number | null): number | null {
-  if (netSalary === null && cashAmount === null) return null
-  return (netSalary ?? 0) + (cashAmount ?? 0)
+// Cash = the extra amount paid on top of the official net salary, to make
+// up the total agreed with the employee. Always derived from
+// Agreement - Net Salary, never entered directly.
+function computeCash(netSalary: number | null, agreement: number | null): number | null {
+  if (netSalary === null && agreement === null) return null
+  return (agreement ?? 0) - (netSalary ?? 0)
 }
 
 const thStyle: React.CSSProperties = {
@@ -58,7 +58,7 @@ const inputStyle: React.CSSProperties = {
 export default function PayrollTable({ rows }: { rows: PayrollRow[] }) {
   const router = useRouter()
   const [editingId, setEditingId] = useState<string | null>(null)
-  const [draft, setDraft] = useState<EditState>({ bank: '', grossSalary: '', netSalary: '', cashAmount: '', iban: '', accountNumber: '' })
+  const [draft, setDraft] = useState<EditState>({ bank: '', grossSalary: '', netSalary: '', agreement: '', iban: '', accountNumber: '' })
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
 
@@ -69,7 +69,7 @@ export default function PayrollTable({ rows }: { rows: PayrollRow[] }) {
       bank: row.bank ?? '',
       grossSalary: row.grossSalary?.toString() ?? '',
       netSalary: row.netSalary?.toString() ?? '',
-      cashAmount: row.cashAmount?.toString() ?? '',
+      agreement: row.agreement?.toString() ?? '',
       iban: row.iban ?? '',
       accountNumber: row.accountNumber ?? '',
     })
@@ -90,7 +90,7 @@ export default function PayrollTable({ rows }: { rows: PayrollRow[] }) {
         bank: draft.bank,
         grossSalary: draft.grossSalary === '' ? null : Number(draft.grossSalary),
         netSalary: draft.netSalary === '' ? null : Number(draft.netSalary),
-        cashAmount: draft.cashAmount === '' ? null : Number(draft.cashAmount),
+        agreement: draft.agreement === '' ? null : Number(draft.agreement),
         iban: draft.iban,
         accountNumber: draft.accountNumber,
       }),
@@ -137,12 +137,12 @@ export default function PayrollTable({ rows }: { rows: PayrollRow[] }) {
           <tbody>
             {rows.map(row => {
               const isEditing = editingId === row.id
-              const agreement = isEditing
-                ? computeAgreement(
+              const cash = isEditing
+                ? computeCash(
                     draft.netSalary === '' ? null : Number(draft.netSalary),
-                    draft.cashAmount === '' ? null : Number(draft.cashAmount)
+                    draft.agreement === '' ? null : Number(draft.agreement)
                   )
-                : computeAgreement(row.netSalary, row.cashAmount)
+                : computeCash(row.netSalary, row.agreement)
 
               return (
                 <tr key={row.id} style={{ borderBottom: '1px solid #F5F5F5' }}>
@@ -159,11 +159,11 @@ export default function PayrollTable({ rows }: { rows: PayrollRow[] }) {
                       <td style={tdStyle}>
                         <input style={{ ...inputStyle, textAlign: 'right' }} type="number" step="0.01" value={draft.netSalary} onChange={e => setDraft(d => ({ ...d, netSalary: e.target.value }))} placeholder="0.00" />
                       </td>
-                      <td style={{ ...tdStyle, textAlign: 'right', fontWeight: 600, color: '#001A21', whiteSpace: 'nowrap' }} title="Auto-calculated: Net Salary + Cash">
-                        {formatMoney(agreement)}
-                      </td>
                       <td style={tdStyle}>
-                        <input style={{ ...inputStyle, textAlign: 'right' }} type="number" step="0.01" value={draft.cashAmount} onChange={e => setDraft(d => ({ ...d, cashAmount: e.target.value }))} placeholder="0.00" />
+                        <input style={{ ...inputStyle, textAlign: 'right' }} type="number" step="0.01" value={draft.agreement} onChange={e => setDraft(d => ({ ...d, agreement: e.target.value }))} placeholder="0.00" />
+                      </td>
+                      <td style={{ ...tdStyle, textAlign: 'right', fontWeight: 600, color: '#001A21', whiteSpace: 'nowrap' }} title="Auto-calculated: Agreement − Net Salary">
+                        {formatMoney(cash)}
                       </td>
                       <td style={tdStyle}>
                         <input style={inputStyle} value={draft.iban} onChange={e => setDraft(d => ({ ...d, iban: e.target.value }))} placeholder="CY00 0000 0000..." />
@@ -195,10 +195,10 @@ export default function PayrollTable({ rows }: { rows: PayrollRow[] }) {
                       <td style={tdStyle}>{row.bank || '—'}</td>
                       <td style={{ ...tdStyle, textAlign: 'right' }}>{formatMoney(row.grossSalary)}</td>
                       <td style={{ ...tdStyle, textAlign: 'right' }}>{formatMoney(row.netSalary)}</td>
-                      <td style={{ ...tdStyle, textAlign: 'right', fontWeight: 600, color: '#001A21' }} title="Auto-calculated: Net Salary + Cash">
-                        {formatMoney(agreement)}
+                      <td style={{ ...tdStyle, textAlign: 'right' }}>{formatMoney(row.agreement)}</td>
+                      <td style={{ ...tdStyle, textAlign: 'right', fontWeight: 600, color: '#001A21' }} title="Auto-calculated: Agreement − Net Salary">
+                        {formatMoney(cash)}
                       </td>
-                      <td style={{ ...tdStyle, textAlign: 'right' }}>{formatMoney(row.cashAmount)}</td>
                       <td style={{ ...tdStyle, fontFamily: 'monospace', fontSize: 12 }}>{row.iban || '—'}</td>
                       <td style={{ ...tdStyle, fontFamily: 'monospace', fontSize: 12 }}>{row.accountNumber || '—'}</td>
                       <td style={{ ...tdStyle, textAlign: 'right' }}>

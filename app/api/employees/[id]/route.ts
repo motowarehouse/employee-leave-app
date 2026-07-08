@@ -23,7 +23,7 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
   const body = await req.json()
   const {
     name, role, startDate, annualEntitlement, active,
-    bank, grossSalary, netSalary, cashAmount, iban, accountNumber,
+    bank, grossSalary, netSalary, agreement, iban, accountNumber,
   } = body
 
   const employee = await prisma.employee.update({
@@ -37,7 +37,7 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
       ...(bank !== undefined && { bank: bank?.trim() || null }),
       ...(grossSalary !== undefined && { grossSalary: grossSalary === '' || grossSalary === null ? null : Number(grossSalary) }),
       ...(netSalary !== undefined && { netSalary: netSalary === '' || netSalary === null ? null : Number(netSalary) }),
-      ...(cashAmount !== undefined && { cashAmount: cashAmount === '' || cashAmount === null ? null : Number(cashAmount) }),
+      ...(agreement !== undefined && { agreement: agreement === '' || agreement === null ? null : Number(agreement) }),
       ...(iban !== undefined && { iban: iban?.trim() || null }),
       ...(accountNumber !== undefined && { accountNumber: accountNumber?.trim() || null }),
     },
