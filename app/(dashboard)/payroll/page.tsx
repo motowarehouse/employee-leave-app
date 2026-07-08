@@ -13,6 +13,7 @@ export default async function PayrollPage() {
     bank: string | null
     grossSalary: number | null
     netSalary: number | null
+    cashAmount: number | null
     iban: string | null
     accountNumber: string | null
   }>
@@ -23,6 +24,7 @@ export default async function PayrollPage() {
     bank: emp.bank,
     grossSalary: emp.grossSalary,
     netSalary: emp.netSalary,
+    cashAmount: emp.cashAmount,
     iban: emp.iban,
     accountNumber: emp.accountNumber,
   }))
@@ -32,7 +34,7 @@ export default async function PayrollPage() {
       <div>
         <h1 style={{ fontSize: 22, fontWeight: 700, color: '#001A21' }}>Payroll</h1>
         <p style={{ fontSize: 13, color: '#888888', marginTop: 2 }}>
-          Bank and salary details per employee. Click the pencil icon to edit a row.
+          Bank and salary details per employee. Agreement is auto-calculated as Net Salary + Cash. Click the pencil icon to edit a row.
         </p>
       </div>
 

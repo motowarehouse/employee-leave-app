@@ -87,8 +87,10 @@ you set in `.env`.
   once they're announced — 2026 is pre-seeded.
 - **Team Calendar** shows the whole team's leave for any month at a glance.
 - **Payroll** page stores each employee's bank, gross salary (ακάθαρτος
-  μισθός), net salary (μισθός καθαρός), IBAN, and account number — click the
-  pencil icon on a row to edit.
+  μισθός), net salary (μισθός καθαρός), cash amount, IBAN, and account
+  number — click the pencil icon on a row to edit. "Agreement" is not
+  entered directly; it's auto-calculated as Net Salary + Cash (the total
+  amount actually agreed with the employee).
 
 ## Adding More Admin Accounts Later
 
