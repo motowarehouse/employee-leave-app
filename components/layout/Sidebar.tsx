@@ -4,13 +4,14 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { signOut } from 'next-auth/react'
-import { LayoutDashboard, Users, CalendarRange, Building2, LogOut, ChevronRight, Settings } from 'lucide-react'
+import { LayoutDashboard, Users, CalendarRange, Building2, LogOut, ChevronRight, Settings, Banknote } from 'lucide-react'
 
 const NAV = [
   { href: '/',          icon: LayoutDashboard, label: 'Dashboard' },
   { href: '/employees', icon: Users,           label: 'Employees' },
   { href: '/calendar',  icon: CalendarRange,   label: 'Calendar' },
   { href: '/closures',  icon: Building2,       label: 'Shop Closures' },
+  { href: '/payroll',   icon: Banknote,        label: 'Payroll' },
   { href: '/holidays',  icon: Settings,        label: 'Public Holidays' },
 ]
 

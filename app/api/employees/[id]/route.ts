@@ -21,7 +21,10 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
   if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
   const body = await req.json()
-  const { name, role, startDate, annualEntitlement, active } = body
+  const {
+    name, role, startDate, annualEntitlement, active,
+    bank, grossSalary, netSalary, iban, accountNumber,
+  } = body
 
   const employee = await prisma.employee.update({
     where: { id: params.id },
@@ -31,6 +34,11 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
       ...(startDate !== undefined && { startDate: startDate ? new Date(startDate) : null }),
       ...(annualEntitlement !== undefined && { annualEntitlement: Number(annualEntitlement) }),
       ...(active !== undefined && { active: Boolean(active) }),
+      ...(bank !== undefined && { bank: bank?.trim() || null }),
+      ...(grossSalary !== undefined && { grossSalary: grossSalary === '' || grossSalary === null ? null : Number(grossSalary) }),
+      ...(netSalary !== undefined && { netSalary: netSalary === '' || netSalary === null ? null : Number(netSalary) }),
+      ...(iban !== undefined && { iban: iban?.trim() || null }),
+      ...(accountNumber !== undefined && { accountNumber: accountNumber?.trim() || null }),
     },
   })
 

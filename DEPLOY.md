@@ -86,6 +86,9 @@ you set in `.env`.
 - **Public Holidays** page lets you add next year's Cyprus holiday dates
   once they're announced — 2026 is pre-seeded.
 - **Team Calendar** shows the whole team's leave for any month at a glance.
+- **Payroll** page stores each employee's bank, gross salary (ακάθαρτος
+  μισθός), net salary (μισθός καθαρός), IBAN, and account number — click the
+  pencil icon on a row to edit.
 
 ## Adding More Admin Accounts Later
 
